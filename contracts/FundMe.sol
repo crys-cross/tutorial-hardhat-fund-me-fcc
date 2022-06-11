@@ -1,26 +1,60 @@
 // SPDX-License-Identifier: MIT
+/* STYLE GUIDE COMMENTS BELOW */
+//1. Pragma
 pragma solidity ^0.8.8;
-
+//2. Imports
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "./PriceConverter.sol";
+//3. Error Code(use contract namebefore error name)
+error FundMe__NotOwner();
+//4. Interfaces, Libraries, Contracts here
 
-error NotOwner();
-
+//5. Natspec below
+/**
+*  @title a contract for crowd funding
+*  @author crys
+*  @notice This contract is to demo a sample funding contract
+*  @dev This implements price feeds as our library
+**/
 contract FundMe {
+    //6. Type declarations
     using PriceConverter for uint256;
 
+    //7. State variables
     mapping(address => uint256) public addressToAmountFunded;
     address[] public funders;
-
     // Could we make this constant?  /* hint: no! We should make it immutable! */
     address public /* immutable */ i_owner;
     uint256 public constant MINIMUM_USD = 50 * 10 ** 18;
-    
     AggregatorV3Interface public priceFeed;
+    //8. Modifiers
+    modifier onlyOwner {
+        // require(msg.sender == owner);
+        if (msg.sender != i_owner) revert FundMe__NotOwner();
+        _;
+    }
+
+    // Funtions Order
+    // constructor
+    // recieve
+    // fallback
+    // external
+    // public
+    // internal
+    // private
+    // view/pure
 
     constructor(address priceFeedAddress) {
         i_owner = msg.sender;
         priceFeed = AggregatorV3Interface(priceFeedAddress);
+    }
+
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
     }
 
     function fund() public payable {
@@ -35,11 +69,7 @@ contract FundMe {
     //     return priceFeed.version();
     // }
     
-    modifier onlyOwner {
-        // require(msg.sender == owner);
-        if (msg.sender != i_owner) revert NotOwner();
-        _;
-    }
+    
     
     function withdraw() payable onlyOwner public {
         for (uint256 funderIndex=0; funderIndex < funders.length; funderIndex++){
@@ -68,13 +98,8 @@ contract FundMe {
     //  /        \
     //receive()  fallback()
 
-    fallback() external payable {
-        fund();
-    }
-
-    receive() external payable {
-        fund();
-    }
+    
+    
 
 }
 
