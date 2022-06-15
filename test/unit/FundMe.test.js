@@ -21,7 +21,7 @@ describe("FundMe", function () {
     })
     describe("constructor", function () {
         it("sets the aggregator addresses correctly", async () => {
-            const response = await fundMe.priceFeed()
+            const response = await fundMe.getPriceFeed()
             assert.equal(response, mockV3Aggregator.address)
         })
     })
@@ -33,12 +33,12 @@ describe("FundMe", function () {
         })
         it("updated the amount funded data structure", async () => {
             await fundMe.fund({ value: sendValue })
-            const response = await fundMe.addressToAmountFunded(deployer)
+            const response = await fundMe.getaddressToAmountFunded(deployer)
             assert.equal(response.toString(), sendValue.toString())
         })
         it("Adds funder to array of sfunders", async () => {
             await fundMe.fund({ value: sendValue })
-            const funder = await fundMe.sfunders(0)
+            const funder = await fundMe.getFunder(0)
             assert.equal(funder, deployer)
         })
     })
@@ -106,10 +106,10 @@ describe("FundMe", function () {
                 endingDeployerBalance.add(gasCost).toString()
             )
             // Make sure theat the sfunders are reset properly
-            await expect(fundMe.sfunders(0)).to.be.reverted
+            await expect(fundMe.getFunder(0)).to.be.reverted
             for (i = 1; i < 6; i++) {
                 assert.equal(
-                    await fundMe.addressToAmountFunded(accounts[i].address),
+                    await fundMe.getaddressToAmountFunded(accounts[i].address),
                     0
                 )
             }
@@ -148,10 +148,10 @@ describe("FundMe", function () {
                 endingDeployerBalance.add(gasCost).toString()
             )
             // Make sure theat the sfunders are reset properly
-            await expect(fundMe.sfunders(0)).to.be.reverted
+            await expect(fundMe.getFunder(0)).to.be.reverted
             for (i = 1; i < 6; i++) {
                 assert.equal(
-                    await fundMe.addressToAmountFunded(accounts[i].address),
+                    await fundMe.getaddressToAmountFunded(accounts[i].address),
                     0
                 )
             }
