@@ -1,4 +1,4 @@
-const { expect, assert } = require("chai")
+const { assert } = require("chai")
 const { getNamedAccounts, ethers } = require("hardhat")
 const { developmentChains } = require("../../helper-hardhat-config")
 
@@ -20,7 +20,7 @@ developmentChains.includes(network.name)
               await fundMe.withdraw()
               const endingBalance = await fundMe.provider.getBalance(
                   fundMe.address
-                  assert.equal(endingBalance.toString(), "0")          
               )
+              assert.equal(endingBalance.toString(), "0")
           })
       })
