@@ -7,6 +7,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "./PriceConverter.sol";
 //3. Error Code(use contract namebefore error name)
 error FundMe__NotOwner();
+error FundMe__SendMoreETH();
 
 //4. Interfaces, Libraries, Contracts here
 
@@ -60,10 +61,13 @@ contract FundMe {
     // }
 
     function fund() public payable {
-        require(
-            msg.value.getConversionRate(priceFeed) >= MINIMUM_USD,
-            "You need to spend more ETH!"
-        );
+        /* Use new error below */
+        // require(
+        //     msg.value.getConversionRate(priceFeed) >= MINIMUM_USD,
+        //     "You need to spend more ETH!"
+        // );
+        if (msg.value.getConversionRate(priceFeed) < MINIMUM_USD)
+            revert FundMe__SendMoreETH();
         // require(PriceConverter.getConversionRate(msg.value) >= MINIMUM_USD, "You need to spend more ETH!");
         addressToAmountFunded[msg.sender] += msg.value;
         sfunders.push(msg.sender);
