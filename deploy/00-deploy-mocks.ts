@@ -1,9 +1,9 @@
-const { network } = require("hardhat")
-const {
+import { network } from "hardhat"
+import {
     developmentChains,
     DECIMALS,
     INITIAL_ANSWER,
-} = require("../helper-hardhat-config")
+} from "../helper-hardhat-config"
 
 // const DECIMALS = "8"
 // const INITIAL_PRICE = "200000000000" // 2000
