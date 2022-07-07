@@ -1,7 +1,7 @@
-const { getNamedAccounts, ethers } = require("hardhat")
+import { getNamedAccounts, ethers } from "hardhat"
 
-async function main() {
-    const { deployer } = await getNamedAccounts
+const withdraw = async () => {
+    const { deployer } = await getNamedAccounts()
     const fundMe = await ethers.getContract("FundMe", deployer)
     console.log("Funding...")
     const transactionResponse = await fundMe.withdraw()
@@ -9,7 +9,7 @@ async function main() {
     console.log("Got it back!")
 }
 
-main()
+withdraw()
     .then(() => process.exit(0))
     .catch((error) => {
         console.error(error)

@@ -189,34 +189,14 @@ describe("FundMe", () => {
                   )
                   // Make sure theat the sfunders are reset properly
                   await expect(fundMe.getFunder(0)).to.be.reverted
-                //   for (let i = 1; i < 6; i++) {
-                //       assert.equal(
-                //           await fundMe.getaddressToAmountFunded(
-                //               accounts[i].address
-                //           ).toString(),
-                //           "0"
-                //       )
-                //   }
-                assert.equal(
-                    (await fundMe.getaddressToAmountFunded(accounts[1].address)).toString(),
-                    "0"
-                  )
-                  assert.equal(
-                    (await fundMe.getaddressToAmountFunded(accounts[2].address)).toString(),
-                    "0"
-                  )
-                  assert.equal(
-                    (await fundMe.getaddressToAmountFunded(accounts[3].address)).toString(),
-                    "0"
-                  )
-                  assert.equal(
-                    (await fundMe.getaddressToAmountFunded(accounts[4].address)).toString(),
-                    "0"
-                  )
-                  assert.equal(
-                    (await fundMe.getaddressToAmountFunded(accounts[5].address)).toString(),
-                    "0"
-                  )
+                  for (let i = 1; i < 6; i++) {
+                      assert.equal(
+                          await fundMe.getaddressToAmountFunded(
+                              accounts[i].address
+                          ).toString(),
+                          "0"
+                      )
+                  }
               })
               it("Only allows the owner to withdraw", async () => {
                   const accounts = await ethers.getSigners()
