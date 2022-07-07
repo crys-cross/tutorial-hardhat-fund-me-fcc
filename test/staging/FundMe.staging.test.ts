@@ -1,6 +1,8 @@
-const { assert } = require("chai")
-const { getNamedAccounts, ethers } = require("hardhat")
-const { developmentChains } = require("../../helper-hardhat-config")
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
+import { assert } from "chai"
+import { network, ethers } from "hardhat"
+import { developmentChains } from "../../helper-hardhat-config"
+import { FundMe } from "../../typechain-types"
 
 // let variable = true
 // let someVar = variable ? "yes" : "no"
@@ -8,9 +10,9 @@ const { developmentChains } = require("../../helper-hardhat-config")
 developmentChains.includes(network.name)
     ? describe.skip
     : describe("FundMe", async () => {
-          let fundMe
-          let deployer
-          const sendValue = ethers.utils.parseEthers("1")
+          let fundMe: FundMe
+          let deployer: SignerWithAddress
+          const sendValue = ethers.utils.parseEther("0.1")
           beforeEach(async () => {
               deployer = (await getNamedAccounts()).deployer
               fundMe = await ethers.getContract("FundMe", deployer)
