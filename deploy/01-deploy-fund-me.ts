@@ -2,10 +2,10 @@
 // import
 // main function
 // calling of main function
- 
-import { getNamedAccounts, deployments, network } from "hardhat"
+import { HardhatRuntimeEnvironment } from "hardhat/types"
+import { DeployFunction } from "hardhat-deploy/dist/types"
 import { networkConfig, developmentChains } from "../helper-hardhat-config"
-import { verify } from "../utils/verify"
+import verify from "../utils/verify"
 /* alternative syntax below */
 // function deployfunc(hre) {
 //     console.log("Hi!")
@@ -18,7 +18,8 @@ import { verify } from "../utils/verify"
 // hre.getNamedAccounts
 // hre.deployements
 /* shortest version below */
-module.exports = async ({ getNamedAccounts, deployments }) => {
+const deployFundMe: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
+    const {getNamedAccounts, deployments, network} = hre
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
@@ -27,12 +28,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     // const ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"
 
-    let ethUsdPriceFeedAddress
+    let ethUsdPriceFeedAddress: string
     if (chainId == 31337) {
         const ethUsdAggregator = await deployments.get("MockV3Aggregator")
         ethUsdPriceFeedAddress = ethUsdAggregator.address
     } else {
-        ethUsdPriceFeedAddress = networkConfig[chainId]["ethUsdPriceFeed"]
+        ethUsdPriceFeedAddress = networkConfig[network.name].ethUsdPriceFeed!
     }
     log("----------------------------------------------------")
     log("Deploying FundMe and waiting for confirmations...")
@@ -44,7 +45,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         args: [ethUsdPriceFeedAddress],
         log: true,
         // we need to wait if on a live network so we can verify properly
-        waitConfirmations: network.config.blockConfirmations || 1,
+        waitConfirmations: networkConfig[network.name].blockConfirmations || 0,
     })
     log(`FundMe deployed at ${fundMe.address}`)
 
@@ -55,5 +56,5 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         await verify(fundMe.address, [ethUsdPriceFeedAddress])
     }
 }
-
-module.exports.tags = ["all", "fundme"]
+export default deployFundMe
+deployFundMe.tags = ["all", "fundme"]

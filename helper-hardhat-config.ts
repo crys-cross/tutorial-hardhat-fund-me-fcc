@@ -10,6 +10,8 @@ export interface networkConfigInfo {
 export const networkConfig: networkConfigInfo = {
     // Price Feed Address, values can be obtained at https://docs.chain.link/docs/reference-contracts
     // Default one is ETH/USD contract on Kovan
+    localhost: {},
+    hardhat: {},
     kovan: {
         ethUsdPriceFeed: "0x9326BFA02ADD2366b30bacB125260Af641031331",
         blockConfirmations: 6,
@@ -25,5 +27,5 @@ export const networkConfig: networkConfigInfo = {
 }
 
 export const developmentChains = ["hardhat", "localhost"]
-export const DECIMALS = 18
-export const INITIAL_ANSWER = 2000000000000000000000    //2000
+export const DECIMALS = 8
+export const INITIAL_ANSWER = 200000000000    //2000

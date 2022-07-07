@@ -14,7 +14,9 @@ developmentChains.includes(network.name)
           let deployer: SignerWithAddress
           const sendValue = ethers.utils.parseEther("0.1")
           beforeEach(async () => {
-              deployer = (await getNamedAccounts()).deployer
+            //   deployer = (await getNamedAccounts()).deployer
+              const accounts = await ethers.getSigners()
+              deployer = accounts[0]
               fundMe = await ethers.getContract("FundMe", deployer)
           })
           it("allows people to fund and withdraw", async () => {
