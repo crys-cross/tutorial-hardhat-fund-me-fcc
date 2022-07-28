@@ -1,4 +1,4 @@
-import {getNamedAccounts, ethers, deployments } from "hardhat"
+import {getNamedAccounts, ethers } from "hardhat"
 
 const fund = async () => {
     const { deployer } = await getNamedAccounts()
