@@ -2,9 +2,8 @@ import fs from "fs"
 import { ethers, network } from "hardhat"
 import { DeployFunction } from "hardhat-deploy/types"
 
-const frontEndContractsFile =
-    "../../practice-nextjs-smartcontract-lottery-fcc/constants/contractAddresses.json"
-const frontEndAbiFile = "../../practice-nextjs-smartcontract-lottery-fcc/constants/abi.json"
+const frontEndContractsFile = "../practice-nextjs-fund-me-fcc/constants/contractAddresses.json"
+const frontEndAbiFile = "../practice-nextjs-fund-me-fcc/constants/abi.json"
 
 const updateUI: DeployFunction = async () => {
     if (process.env.UPDATE_FRONT_END) {
@@ -14,24 +13,24 @@ const updateUI: DeployFunction = async () => {
     }
 }
 const updateContractAddresses = async () => {
-    const raffle = await ethers.getContract("Raffle")
+    const fundMe = await ethers.getContract("FundMe")
     const chainId = network.config.chainId!.toString()
     const currentAddresses = JSON.parse(fs.readFileSync(frontEndContractsFile, "utf8"))
     if (chainId in currentAddresses) {
-        if (!currentAddresses[chainId].includes(raffle.address)) {
-            currentAddresses[chainId].push(raffle.address)
+        if (!currentAddresses[chainId].includes(fundMe.address)) {
+            currentAddresses[chainId].push(fundMe.address)
         }
     } else {
-        currentAddresses[chainId] = [raffle.address]
+        currentAddresses[chainId] = [fundMe.address]
     }
     fs.writeFileSync(frontEndContractsFile, JSON.stringify(currentAddresses))
     console.log("Front end written!")
 }
 const updateAbi = async () => {
-    const raffle = await ethers.getContract("Raffle")
+    const fundMe = await ethers.getContract("FundMe")
     fs.writeFileSync(
         frontEndAbiFile,
-        raffle.interface.format(ethers.utils.FormatTypes.json).toString()
+        fundMe.interface.format(ethers.utils.FormatTypes.json).toString()
     )
 }
 
